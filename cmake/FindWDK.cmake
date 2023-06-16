@@ -113,6 +113,7 @@ set(WDK_COMPILE_FLAGS
     "/FIwarning.h" # disable warnings in WDK headers
     "/FI${WDK_ADDITIONAL_FLAGS_FILE}" # include file to disable RTC
     "/Qspectre-" # disable Qspectre
+    "/GS-" # disable GS
     "/W3"
     "/WX-"
     "/MT"
@@ -181,25 +182,13 @@ function(wdk_add_driver _target)
         target_link_libraries(${_target} WDK::MEMCMP)
     endif()
 
-    if(DEFINED WDK_KMDF)
-        target_include_directories(${_target} SYSTEM PRIVATE "${WDK_ROOT}/Include/wdf/kmdf/${WDK_KMDF}")
-        target_link_libraries(${_target}
-            "${WDK_ROOT}/Lib/wdf/kmdf/${WDK_PLATFORM}/${WDK_KMDF}/WdfDriverEntry.lib"
-            "${WDK_ROOT}/Lib/wdf/kmdf/${WDK_PLATFORM}/${WDK_KMDF}/WdfLdr.lib"
-            )
+    target_include_directories(${_target} SYSTEM PRIVATE "${WDK_ROOT}/Include/wdf/kmdf/${WDK_KMDF}")
+    target_link_libraries(${_target}
+        "${WDK_ROOT}/Lib/wdf/kmdf/${WDK_PLATFORM}/${WDK_KMDF}/WdfDriverEntry.lib"
+        "${WDK_ROOT}/Lib/wdf/kmdf/${WDK_PLATFORM}/${WDK_KMDF}/WdfLdr.lib"
+        )
 
-        if(CMAKE_SIZEOF_VOID_P EQUAL 4)
-            set_property(TARGET ${_target} APPEND_STRING PROPERTY LINK_FLAGS "/ENTRY:FxDriverEntry@8")
-        elseif(CMAKE_SIZEOF_VOID_P  EQUAL 8)
-            set_property(TARGET ${_target} APPEND_STRING PROPERTY LINK_FLAGS "/ENTRY:FxDriverEntry")
-        endif()
-    else()
-        if(CMAKE_SIZEOF_VOID_P EQUAL 4)
-            set_property(TARGET ${_target} APPEND_STRING PROPERTY LINK_FLAGS "/ENTRY:GsDriverEntry@8")
-        elseif(CMAKE_SIZEOF_VOID_P  EQUAL 8)
-            set_property(TARGET ${_target} APPEND_STRING PROPERTY LINK_FLAGS "/ENTRY:GsDriverEntry")
-        endif()
-    endif()
+    set_property(TARGET ${_target} APPEND_STRING PROPERTY LINK_FLAGS "/ENTRY:DriverEntry")
 
     # Code signing
     add_custom_command(
@@ -228,7 +217,5 @@ function(wdk_add_library _target)
         "${WDK_ROOT}/Include/${WDK_INC_VERSION}/km/crt"
         )
 
-    if(DEFINED WDK_KMDF)
-        target_include_directories(${_target} SYSTEM PRIVATE "${WDK_ROOT}/Include/wdf/kmdf/${WDK_KMDF}")
-    endif()
+    target_include_directories(${_target} SYSTEM PRIVATE "${WDK_ROOT}/Include/wdf/kmdf/${WDK_KMDF}")
 endfunction()
