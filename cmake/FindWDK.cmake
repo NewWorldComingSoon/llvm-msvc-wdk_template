@@ -131,6 +131,8 @@ else()
     message(FATAL_ERROR "Unsupported architecture")
 endif()
 
+message(STATUS "WDK_PLATFORM: " ${WDK_PLATFORM})
+
 string(CONCAT WDK_LINK_FLAGS
     "/MANIFEST:NO " #
     "/DRIVER " #
@@ -142,6 +144,9 @@ string(CONCAT WDK_LINK_FLAGS
     "/NODEFAULTLIB " # do not link default CRT
     "/SECTION:INIT,d " #
     "/VERSION:10.0 " #
+    "/WX:NO " # disable link warning error
+    "/MAP "
+    "/DEBUG "
     )
 
 # Generate imported targets for WDK lib files
@@ -175,7 +180,7 @@ function(wdk_add_driver _target)
         "${WDK_ROOT}/Include/${WDK_INC_VERSION}/km/crt"
         )
 
-    target_link_libraries(${_target} WDK::NTOSKRNL WDK::HAL WDK::BUFFEROVERFLOWK WDK::WMILIB)
+    target_link_libraries(${_target} WDK::NTOSKRNL WDK::HAL WDK::WMILIB WDK::FLTMGR WDK::TDI WDK::NETIO WDK::NTSTRSAFE WDK::AUX_KLIB WDK::WDMSEC WDK::WDM WDK::LIBCNTPR)
 
     if(CMAKE_SIZEOF_VOID_P EQUAL 4)
         target_link_libraries(${_target} WDK::MEMCMP)
@@ -187,20 +192,9 @@ function(wdk_add_driver _target)
             "${WDK_ROOT}/Lib/wdf/kmdf/${WDK_PLATFORM}/${WDK_KMDF}/WdfDriverEntry.lib"
             "${WDK_ROOT}/Lib/wdf/kmdf/${WDK_PLATFORM}/${WDK_KMDF}/WdfLdr.lib"
             )
-
-        if(CMAKE_SIZEOF_VOID_P EQUAL 4)
-            set_property(TARGET ${_target} APPEND_STRING PROPERTY LINK_FLAGS "/ENTRY:FxDriverEntry@8")
-        elseif(CMAKE_SIZEOF_VOID_P  EQUAL 8)
-            set_property(TARGET ${_target} APPEND_STRING PROPERTY LINK_FLAGS "/ENTRY:FxDriverEntry")
-        endif()
-    else()
-        if(CMAKE_SIZEOF_VOID_P EQUAL 4)
-            set_property(TARGET ${_target} APPEND_STRING PROPERTY LINK_FLAGS "/ENTRY:GsDriverEntry@8")
-        elseif(CMAKE_SIZEOF_VOID_P  EQUAL 8)
-            set_property(TARGET ${_target} APPEND_STRING PROPERTY LINK_FLAGS "/ENTRY:GsDriverEntry")
-        endif()
     endif()
-
+    set_property(TARGET ${_target} APPEND_STRING PROPERTY LINK_FLAGS "/ENTRY:DriverEntry")
+    
     # Code signing
     add_custom_command(
         TARGET ${_target} POST_BUILD
