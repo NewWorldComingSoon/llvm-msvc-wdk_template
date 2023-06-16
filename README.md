@@ -6,7 +6,7 @@ Simple [`cmkr`](https://cmkr.build) template for a WDK kernel driver for Windows
 
 - Visual Studio 2022
 - [WDK 10](https://learn.microsoft.com/en-us/windows-hardware/drivers/download-the-wdk)
-- [llvm-msvc](https://github.com/NewWorldComingSoon/llvm-msvc-build)
+- [llvm-msvc](https://github.com/NewWorldComingSoon/llvm-msvc-build/releases)
 - CMake 3.15+
 
 ## Building with llvm-msvc
