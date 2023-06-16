@@ -170,19 +170,17 @@ function(wdk_add_driver _target)
         target_compile_definitions(${_target} PRIVATE NTDDI_VERSION=${WDK_NTDDI_VERSION})
     endif()
 
-    target_include_directories(${_target} SYSTEM PRIVATE
-        "${WDK_ROOT}/Include/${WDK_INC_VERSION}/shared"
-        "${WDK_ROOT}/Include/${WDK_INC_VERSION}/km"
-        "${WDK_ROOT}/Include/${WDK_INC_VERSION}/km/crt"
-        )
-
+    set_property(TARGET ${_target} APPEND_STRING PROPERTY INCLUDE_DIRECTORIES 
+        "${WDK_ROOT}/Include/${WDK_INC_VERSION}/shared;${WDK_ROOT}/Include/${WDK_INC_VERSION}/km;${WDK_ROOT}/Include/${WDK_INC_VERSION}/km/crt"
+    )
+    set_property(TARGET ${_target} APPEND_STRING PROPERTY INCLUDE_DIRECTORIES "${WDK_ROOT}/Include/wdf/kmdf/${WDK_KMDF}")
+    
     target_link_libraries(${_target} WDK::NTOSKRNL WDK::HAL WDK::BUFFEROVERFLOWK WDK::WMILIB)
 
     if(CMAKE_SIZEOF_VOID_P EQUAL 4)
         target_link_libraries(${_target} WDK::MEMCMP)
     endif()
-
-    target_include_directories(${_target} SYSTEM PRIVATE "${WDK_ROOT}/Include/wdf/kmdf/${WDK_KMDF}")
+    
     target_link_libraries(${_target}
         "${WDK_ROOT}/Lib/wdf/kmdf/${WDK_PLATFORM}/${WDK_KMDF}/WdfDriverEntry.lib"
         "${WDK_ROOT}/Lib/wdf/kmdf/${WDK_PLATFORM}/${WDK_KMDF}/WdfLdr.lib"
@@ -211,11 +209,9 @@ function(wdk_add_library _target)
         target_compile_definitions(${_target} PRIVATE NTDDI_VERSION=${WDK_NTDDI_VERSION})
     endif()
 
-    target_include_directories(${_target} SYSTEM PRIVATE
-        "${WDK_ROOT}/Include/${WDK_INC_VERSION}/shared"
-        "${WDK_ROOT}/Include/${WDK_INC_VERSION}/km"
-        "${WDK_ROOT}/Include/${WDK_INC_VERSION}/km/crt"
-        )
+    set_property(TARGET ${_target} APPEND_STRING PROPERTY INCLUDE_DIRECTORIES 
+        "${WDK_ROOT}/Include/${WDK_INC_VERSION}/shared;${WDK_ROOT}/Include/${WDK_INC_VERSION}/km;${WDK_ROOT}/Include/${WDK_INC_VERSION}/km/crt"
+    )
+    set_property(TARGET ${_target} APPEND_STRING PROPERTY INCLUDE_DIRECTORIES "${WDK_ROOT}/Include/wdf/kmdf/${WDK_KMDF}")
 
-    target_include_directories(${_target} SYSTEM PRIVATE "${WDK_ROOT}/Include/wdf/kmdf/${WDK_KMDF}")
 endfunction()
