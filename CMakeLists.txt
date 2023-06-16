@@ -37,9 +37,7 @@ find_package(WDK REQUIRED)
 # Target: MyDriver
 set(MyDriver_SOURCES
 	"src/MyDriver/driver.cpp"
-	"src/MyDriver/log.cpp"
 	"src/MyDriver/driver.hpp"
-	"src/MyDriver/log.hpp"
 	cmake.toml
 )
 

@@ -1,16 +1,7 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+#pragma once
 
-#include <ntifs.h>
-#include <ntddstor.h>
-#include <mountdev.h>
-#include <ntddvol.h>
-#include <ntstrsafe.h>
-#include <ntimage.h>
-#include <wdm.h>
+#include <fltKernel.h>
 
-#ifdef __cplusplus
-}
+#ifndef dprintf
+#    define dprintf(format, ...) DbgPrintEx(DPFLTR_DEFAULT_ID, DPFLTR_ERROR_LEVEL, (format), __VA_ARGS__)
 #endif
