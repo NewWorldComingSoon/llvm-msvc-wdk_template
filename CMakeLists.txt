@@ -29,29 +29,29 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 include("cmake/msvc-configurations.cmake")
 
-project(MyDriver)
+project(Driver-template)
 
 # Packages
 find_package(WDK REQUIRED)
 
-# Target: MyDriver
-set(MyDriver_SOURCES
-	"src/MyDriver/driver.cpp"
-	"src/MyDriver/driver.hpp"
+# Target: Driver
+set(Driver_SOURCES
+	"src/Driver/driver.cpp"
+	"src/Driver/driver.hpp"
 	cmake.toml
 )
 
-wdk_add_driver(MyDriver)
+wdk_add_driver(Driver)
 
-target_sources(MyDriver PRIVATE ${MyDriver_SOURCES})
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${MyDriver_SOURCES})
+target_sources(Driver PRIVATE ${Driver_SOURCES})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${Driver_SOURCES})
 
-target_compile_features(MyDriver PRIVATE
+target_compile_features(Driver PRIVATE
 	cxx_std_20
 )
 
 get_directory_property(CMKR_VS_STARTUP_PROJECT DIRECTORY ${PROJECT_SOURCE_DIR} DEFINITION VS_STARTUP_PROJECT)
 if(NOT CMKR_VS_STARTUP_PROJECT)
-	set_property(DIRECTORY ${PROJECT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT MyDriver)
+	set_property(DIRECTORY ${PROJECT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT Driver)
 endif()
 
