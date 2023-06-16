@@ -34,40 +34,23 @@ project(llvm-msvc-driver-template)
 # Packages
 find_package(WDK REQUIRED)
 
-# Target: utils
-set(utils_SOURCES
-	"src/lib/utils/utils.cpp"
-	"src/lib/utils/utils.h"
-	cmake.toml
-)
-
-wdk_add_library(utils)
-
-target_sources(utils PRIVATE ${utils_SOURCES})
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${utils_SOURCES})
-
-target_compile_features(utils PUBLIC
-	cxx_std_20
-)
-
-# Target: drv1
-set(drv1_SOURCES
-	"src/sys/drv1/driver.cpp"
-	"src/sys/drv1/driver.h"
-	cmake.toml
-)
-
-wdk_add_driver(drv1)
-
-target_sources(drv1 PRIVATE ${drv1_SOURCES})
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${drv1_SOURCES})
-
-target_compile_features(drv1 PRIVATE
-	cxx_std_20
-)
-
-get_directory_property(CMKR_VS_STARTUP_PROJECT DIRECTORY ${PROJECT_SOURCE_DIR} DEFINITION VS_STARTUP_PROJECT)
-if(NOT CMKR_VS_STARTUP_PROJECT)
-	set_property(DIRECTORY ${PROJECT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT drv1)
+# Subdirectory: lib
+set(CMKR_CMAKE_FOLDER ${CMAKE_FOLDER})
+if(CMAKE_FOLDER)
+	set(CMAKE_FOLDER "${CMAKE_FOLDER}/lib")
+else()
+	set(CMAKE_FOLDER lib)
 endif()
+add_subdirectory(lib)
+set(CMAKE_FOLDER ${CMKR_CMAKE_FOLDER})
+
+# Subdirectory: sys
+set(CMKR_CMAKE_FOLDER ${CMAKE_FOLDER})
+if(CMAKE_FOLDER)
+	set(CMAKE_FOLDER "${CMAKE_FOLDER}/sys")
+else()
+	set(CMAKE_FOLDER sys)
+endif()
+add_subdirectory(sys)
+set(CMAKE_FOLDER ${CMKR_CMAKE_FOLDER})
 

@@ -21,17 +21,7 @@ type = "static"
 add-function = "wdk_add_library"
 compile-features = ["cxx_std_20"]
 
+[subdir.lib]
+[subdir.sys]
 
-[target.utils]
-type = "driver_lib"
-sources = [
-    "src/lib/utils/*.cpp",
-    "src/lib/utils/*.h",
-]
 
-[target.drv1]
-type = "driver"
-sources = [
-    "src/sys/drv1/*.cpp",
-    "src/sys/drv1/*.h",
-]
