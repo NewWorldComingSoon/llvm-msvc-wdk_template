@@ -49,7 +49,7 @@ target_sources(MyDriver PRIVATE ${MyDriver_SOURCES})
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${MyDriver_SOURCES})
 
 target_compile_features(MyDriver PRIVATE
-	cxx_std_17
+	cxx_std_20
 )
 
 get_directory_property(CMKR_VS_STARTUP_PROJECT DIRECTORY ${PROJECT_SOURCE_DIR} DEFINITION VS_STARTUP_PROJECT)
