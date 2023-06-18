@@ -16,4 +16,4 @@ cmake -Bbuild -TLLVM-MSVC_v143
 cmake --build build --config Release
 ```
 
-You can open `build\Driver.sln` in Visual Studio and work there.
+You can open `build\llvm-msvc-driver-template.sln` in Visual Studio and work there.
