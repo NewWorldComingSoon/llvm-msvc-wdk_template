@@ -173,20 +173,26 @@ function(wdk_add_driver _target)
     set_property(TARGET ${_target} APPEND_STRING PROPERTY INCLUDE_DIRECTORIES 
         "${WDK_ROOT}/Include/${WDK_INC_VERSION}/shared;${WDK_ROOT}/Include/${WDK_INC_VERSION}/km;${WDK_ROOT}/Include/${WDK_INC_VERSION}/km/crt"
     )
-    set_property(TARGET ${_target} APPEND_STRING PROPERTY INCLUDE_DIRECTORIES "${WDK_ROOT}/Include/wdf/kmdf/${WDK_KMDF}")
     
+    if(WDK_KMDF)
+        set_property(TARGET ${_target} APPEND_STRING PROPERTY INCLUDE_DIRECTORIES "${WDK_ROOT}/Include/wdf/kmdf/${WDK_KMDF}")
+    endif()
+
     target_link_libraries(${_target} WDK::NTOSKRNL WDK::HAL WDK::WMILIB WDK::FLTMGR WDK::TDI WDK::NETIO WDK::NTSTRSAFE WDK::AUX_KLIB WDK::WDMSEC WDK::WDM WDK::LIBCNTPR)
     
     if(CMAKE_WIN64_DRIVER)
         target_link_libraries(${_target} WDK::BUFFEROVERFLOWK)
     endif()
 
-    target_link_libraries(${_target}
-        "${WDK_ROOT}/Lib/wdf/kmdf/${WDK_PLATFORM}/${WDK_KMDF}/WdfDriverEntry.lib"
-        "${WDK_ROOT}/Lib/wdf/kmdf/${WDK_PLATFORM}/${WDK_KMDF}/WdfLdr.lib"
-        )
-    
-    set_property(TARGET ${_target} APPEND_STRING PROPERTY LINK_FLAGS "/ENTRY:FxDriverEntry")
+    if(WDK_KMDF)
+        target_link_libraries(${_target}
+            "${WDK_ROOT}/Lib/wdf/kmdf/${WDK_PLATFORM}/${WDK_KMDF}/WdfDriverEntry.lib"
+            "${WDK_ROOT}/Lib/wdf/kmdf/${WDK_PLATFORM}/${WDK_KMDF}/WdfLdr.lib"
+            )
+        set_property(TARGET ${_target} APPEND_STRING PROPERTY LINK_FLAGS "/ENTRY:FxDriverEntry")
+    else()
+        set_property(TARGET ${_target} APPEND_STRING PROPERTY LINK_FLAGS "/ENTRY:GsDriverEntry")
+    endif()
 
     # Code signing
     add_custom_command(
@@ -212,6 +218,9 @@ function(wdk_add_library _target)
     set_property(TARGET ${_target} APPEND_STRING PROPERTY INCLUDE_DIRECTORIES 
         "${WDK_ROOT}/Include/${WDK_INC_VERSION}/shared;${WDK_ROOT}/Include/${WDK_INC_VERSION}/km;${WDK_ROOT}/Include/${WDK_INC_VERSION}/km/crt"
     )
-    set_property(TARGET ${_target} APPEND_STRING PROPERTY INCLUDE_DIRECTORIES "${WDK_ROOT}/Include/wdf/kmdf/${WDK_KMDF}")
+
+    if(WDK_KMDF)
+        set_property(TARGET ${_target} APPEND_STRING PROPERTY INCLUDE_DIRECTORIES "${WDK_ROOT}/Include/wdf/kmdf/${WDK_KMDF}")
+    endif()
 
 endfunction()
