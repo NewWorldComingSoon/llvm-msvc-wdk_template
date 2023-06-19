@@ -120,12 +120,17 @@ set(WDK_COMPILE_FLAGS
 set(WDK_COMPILE_DEFINITIONS "WINNT=1")
 set(WDK_COMPILE_DEFINITIONS_DEBUG "MSC_NOOPT;DEPRECATE_DDK_FUNCTIONS=1;DBG=1")
 
-if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+if(CMAKE_WIN64_DRIVER)
     list(APPEND WDK_COMPILE_DEFINITIONS "_WIN64;_AMD64_;AMD64")
     set(WDK_PLATFORM "x64")
+elseif(CMAKE_ARM64_DRIVER)
+    list(APPEND WDK_COMPILE_DEFINITIONS "_ARM64_;ARM64;STD_CALL")
+    set(WDK_PLATFORM "ARM64")
 else()
     message(FATAL_ERROR "Unsupported architecture")
 endif()
+
+message(STATUS "WDK_PLATFORM: " ${WDK_PLATFORM})
 
 string(CONCAT WDK_LINK_FLAGS
     "/MANIFEST:NO " #
@@ -170,8 +175,12 @@ function(wdk_add_driver _target)
     )
     set_property(TARGET ${_target} APPEND_STRING PROPERTY INCLUDE_DIRECTORIES "${WDK_ROOT}/Include/wdf/kmdf/${WDK_KMDF}")
     
-    target_link_libraries(${_target} WDK::NTOSKRNL WDK::HAL WDK::BUFFEROVERFLOWK WDK::WMILIB)
+    target_link_libraries(${_target} WDK::NTOSKRNL WDK::HAL WDK::WMILIB WDK::FLTMGR WDK::TDI WDK::NETIO WDK::NTSTRSAFE WDK::AUX_KLIB WDK::WDMSEC WDK::WDM WDK::LIBCNTPR)
     
+    if(CMAKE_WIN64_DRIVER)
+        target_link_libraries(${_target} WDK::BUFFEROVERFLOWK)
+    endif()
+
     target_link_libraries(${_target}
         "${WDK_ROOT}/Lib/wdf/kmdf/${WDK_PLATFORM}/${WDK_KMDF}/WdfDriverEntry.lib"
         "${WDK_ROOT}/Lib/wdf/kmdf/${WDK_PLATFORM}/${WDK_KMDF}/WdfLdr.lib"
