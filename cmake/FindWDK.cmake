@@ -120,10 +120,7 @@ set(WDK_COMPILE_FLAGS
 set(WDK_COMPILE_DEFINITIONS "WINNT=1")
 set(WDK_COMPILE_DEFINITIONS_DEBUG "MSC_NOOPT;DEPRECATE_DDK_FUNCTIONS=1;DBG=1")
 
-if(CMAKE_SIZEOF_VOID_P EQUAL 4)
-    list(APPEND WDK_COMPILE_DEFINITIONS "_X86_=1;i386=1;STD_CALL")
-    set(WDK_PLATFORM "x86")
-elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     list(APPEND WDK_COMPILE_DEFINITIONS "_WIN64;_AMD64_;AMD64")
     set(WDK_PLATFORM "x64")
 else()
@@ -174,21 +171,13 @@ function(wdk_add_driver _target)
     set_property(TARGET ${_target} APPEND_STRING PROPERTY INCLUDE_DIRECTORIES "${WDK_ROOT}/Include/wdf/kmdf/${WDK_KMDF}")
     
     target_link_libraries(${_target} WDK::NTOSKRNL WDK::HAL WDK::BUFFEROVERFLOWK WDK::WMILIB)
-
-    if(CMAKE_SIZEOF_VOID_P EQUAL 4)
-        target_link_libraries(${_target} WDK::MEMCMP)
-    endif()
     
     target_link_libraries(${_target}
         "${WDK_ROOT}/Lib/wdf/kmdf/${WDK_PLATFORM}/${WDK_KMDF}/WdfDriverEntry.lib"
         "${WDK_ROOT}/Lib/wdf/kmdf/${WDK_PLATFORM}/${WDK_KMDF}/WdfLdr.lib"
         )
-
-    if(CMAKE_SIZEOF_VOID_P EQUAL 4)
-        set_property(TARGET ${_target} APPEND_STRING PROPERTY LINK_FLAGS "/ENTRY:FxDriverEntry@8")
-    elseif(CMAKE_SIZEOF_VOID_P  EQUAL 8)
-        set_property(TARGET ${_target} APPEND_STRING PROPERTY LINK_FLAGS "/ENTRY:FxDriverEntry")
-    endif()
+    
+    set_property(TARGET ${_target} APPEND_STRING PROPERTY LINK_FLAGS "/ENTRY:FxDriverEntry")
 
     # Code signing
     add_custom_command(
