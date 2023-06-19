@@ -113,8 +113,6 @@ set(WDK_COMPILE_FLAGS
     "/FIwarning.h" # disable warnings in WDK headers
     "/FI${WDK_ADDITIONAL_FLAGS_FILE}" # include file to disable RTC
     "/Qspectre-" # disable Qspectre
-    "/GS-" # disable GS
-    "/W3"
     "/WX-"
     "/MT"
     )
@@ -186,7 +184,11 @@ function(wdk_add_driver _target)
         "${WDK_ROOT}/Lib/wdf/kmdf/${WDK_PLATFORM}/${WDK_KMDF}/WdfLdr.lib"
         )
 
-    set_property(TARGET ${_target} APPEND_STRING PROPERTY LINK_FLAGS "/ENTRY:DriverEntry")
+    if(CMAKE_SIZEOF_VOID_P EQUAL 4)
+        set_property(TARGET ${_target} APPEND_STRING PROPERTY LINK_FLAGS "/ENTRY:FxDriverEntry@8")
+    elseif(CMAKE_SIZEOF_VOID_P  EQUAL 8)
+        set_property(TARGET ${_target} APPEND_STRING PROPERTY LINK_FLAGS "/ENTRY:FxDriverEntry")
+    endif()
 
     # Code signing
     add_custom_command(
