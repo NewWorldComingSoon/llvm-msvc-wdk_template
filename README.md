@@ -12,7 +12,7 @@ Simple [`cmkr`](https://cmkr.build) template for a WDK kernel driver for Windows
 ## Building with llvm-msvc
 
 ```
-cmake -Bbuild -TLLVM-MSVC_v143
+cmake -Bbuild -TLLVM-MSVC_v143 -DCMAKE_WIN64_DRIVER=1
 cmake --build build --config Release
 ```
 
