@@ -14,9 +14,22 @@ jobs:
         $psCommand = 'Start-Process ' + "`"${env:GITHUB_ACTION}`"" + ' -Verb RunAs'
         Start-Process powershell -Verb RunAs -ArgumentList 'Invoke-Expression', $psCommand
     
-    - name: Install llvm-msvc
+    - name: Get latest llvm-msvc
+      id: latest_release
+      uses: actions/github-script@v4
+      with:
+        script: |
+          const { data } = await github.repos.getLatestRelease({
+            owner: 'NewWorldComingSoon',
+            repo: 'llvm-msvc-build'
+          })
+          console.log(data.tag_name)
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Install latest llvm-msvc
       run: |
-        $url = 'https://github.com/NewWorldComingSoon/llvm-msvc-build/releases/download/llvm-msvc-build-v2.6/llvm-msvc_X86_64_installer.exe'
+        $url = 'https://github.com/NewWorldComingSoon/llvm-msvc-build/releases/download/' + "${{ steps.latest_release.outputs.result }}" + '/llvm-msvc_X86_64_installer.exe'
         $exe = Join-Path $env:TEMP 'llvm-msvc_X86_64_installer.exe'
         Invoke-WebRequest -Uri $url -OutFile $exe
         Start-Process -FilePath $exe -ArgumentList '/verysilent' -Verb RunAs
