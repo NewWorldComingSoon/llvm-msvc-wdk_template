@@ -11,7 +11,7 @@ jobs:
     
     - name: Set up admin permissions
       run: |
-        $psCommand = 'Start-Process ' + "`"${env:GITHUB_ACTION}"`" -Verb RunAs"
+        $psCommand = 'Start-Process ' + "`"${env:GITHUB_ACTION}`"" + ' -Verb RunAs'
         Start-Process powershell -Verb RunAs -ArgumentList 'Invoke-Expression', $psCommand
     
     - name: Install llvm-msvc
