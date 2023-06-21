@@ -8,8 +8,11 @@ jobs:
     if: ${{ github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository) }}
     runs-on: windows-2022
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+    
+    - name: Set up admin permissions
+      run: |
+        $psCommand = 'Start-Process ' + "`"${env:GITHUB_ACTION}"`" -Verb RunAs"
+        Start-Process powershell -Verb RunAs -ArgumentList 'Invoke-Expression', $psCommand
     
     - name: Install llvm-msvc
       run: |
@@ -18,6 +21,9 @@ jobs:
         Invoke-WebRequest -Uri $url -OutFile $exe
         Start-Process -FilePath $exe -ArgumentList '/verysilent' -Verb RunAs
     
+    - name: Checkout
+      uses: actions/checkout@v2
+      
     - name: Build
       run: |
         cmake -B build -TLLVM-MSVC_v143 -DCMAKE_WIN64_DRIVER=1
