@@ -24,6 +24,7 @@ jobs:
             repo: 'llvm-msvc-build'
           })
           console.log(data.tag_name)
+          return {result: data.tag_name}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
