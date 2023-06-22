@@ -114,7 +114,6 @@ set(WDK_COMPILE_FLAGS
     "/FI${WDK_ADDITIONAL_FLAGS_FILE}" # include file to disable RTC
     "/Qspectre-" # disable Qspectre
     "/WX-"
-    "/MT"
     )
 
 set(WDK_COMPILE_DEFINITIONS "WINNT=1")

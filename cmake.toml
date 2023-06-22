@@ -5,6 +5,7 @@ name = "llvm-msvc-driver-template"
 include-before = [
 	"cmake/msvc-configurations.cmake",
 ]
+msvc-runtime = "static"
 
 [variables]
 CMAKE_MODULE_PATH = "${CMAKE_CURRENT_SOURCE_DIR}/cmake"
