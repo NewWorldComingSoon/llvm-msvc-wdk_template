@@ -1,5 +1,8 @@
 name: build-win64
 
+permissions:
+  contents: write
+  
 on: [push, pull_request]
 
 jobs:
