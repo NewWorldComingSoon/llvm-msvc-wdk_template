@@ -17,7 +17,7 @@ jobs:
       
     - name: Build
       run: |
-        cmake -B build -TLLVM-MSVC_v143 -DCMAKE_WIN64_DRIVER=1
+        cmake -Bbuild -TLLVM-MSVC_v143 -DCMAKE_WIN64_DRIVER=1
         cmake --build build --config Release
     
     - uses: actions/upload-artifact@v2
