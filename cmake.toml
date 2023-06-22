@@ -27,6 +27,7 @@ compile-features = ["cxx_std_20"]
 type = "driver"
 sources = [
     "sys/drv1/*.cpp",
+    "sys/drv1/*.hpp",
     "sys/drv1/*.h",
 ]
 link-libraries = ["utils"]
