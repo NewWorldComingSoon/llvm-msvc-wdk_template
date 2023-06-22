@@ -1,9 +1,0 @@
-
-
-[target.drv1]
-type = "driver"
-sources = [
-    "drv1/*.cpp",
-    "drv1/*.h",
-]
-
