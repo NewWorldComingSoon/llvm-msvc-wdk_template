@@ -23,13 +23,17 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: ${{ github.event.repository.name }}-${{ github.sha }}
-        path: build/sys/Release
+        path: |
+          build/sys/Release
+          build/lib/Release
     
     - name: Compress artifacts
       uses: vimtor/action-zip@26a249fb00d43ca98dad77a4b3838025fc226aa1 # v1.1
       if: ${{ startsWith(github.ref, 'refs/tags/') }}
       with:
-        files: build/sys/Release
+        files: |
+         build/sys/Release/*.*
+         build/lib/Release/*.*
         dest: ${{ github.event.repository.name }}-${{ github.sha }}.zip
 
     - name: Release
