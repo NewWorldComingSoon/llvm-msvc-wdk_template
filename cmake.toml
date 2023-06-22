@@ -22,6 +22,10 @@ add-function = "wdk_add_library"
 compile-features = ["cxx_std_20"]
 
 [subdir.lib]
-[subdir.sys]
 
-
+[target.drv1]
+type = "driver"
+sources = [
+    "sys/drv1/*.cpp",
+    "sys/drv1/*.h",
+]
