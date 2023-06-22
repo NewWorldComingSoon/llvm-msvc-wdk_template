@@ -14,7 +14,15 @@ DriverEntry(_In_ PDRIVER_OBJECT DriverObject, _In_ PUNICODE_STRING RegistryPath)
     // Set callback functions
     DriverObject->DriverUnload = DriverUnload;
 
-    dprintf("[Driver] DriverEntry\n");
+    __try
+    {
+        dprintf("[Driver] DriverEntry\n");
+        __debugbreak();
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER)
+    {
+        dprintf("[Driver] DriverEntry: Exception\n");
+    }
 
     return STATUS_SUCCESS;
 }
