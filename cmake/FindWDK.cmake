@@ -83,9 +83,7 @@ find_program(WDK_SIGNTOOL signtool
     HINTS "${WDK_ROOT}/bin"
     PATH_SUFFIXES
         "${WDK_VERSION}/x64"
-        "${WDK_VERSION}/x86"
         "x64"
-        "x86"
     REQUIRED
 )
 message(STATUS "WDK_SIGNTOOL: ${WDK_SIGNTOOL}")
