@@ -13,7 +13,7 @@ jobs:
     steps:
     
     - name: Setup llvm-msvc
-      uses: NewWorldComingSoon/setup-llvm-msvc@v1
+      uses: NewWorldComingSoon/setup-llvm-msvc@v2
     
     - name: Checkout
       uses: actions/checkout@v2
