@@ -11,7 +11,7 @@ __declspec(naked) UINT64 HowAreYou()
 {
     _asm
     {
-        mov rax,1
+        mov rax, 1
         ret
     }
 }
