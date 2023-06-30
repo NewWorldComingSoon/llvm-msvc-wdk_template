@@ -7,6 +7,15 @@ DriverUnload(_In_ PDRIVER_OBJECT DriverObject)
     dprintf("[Driver] DriverUnload\n");
 }
 
+__declspec(naked) UINT64 HowAreYou()
+{
+    _asm
+    {
+        mov rax,1
+        ret
+    }
+}
+
 _Function_class_(DRIVER_INITIALIZE) _IRQL_requires_same_ _IRQL_requires_(PASSIVE_LEVEL)
 extern "C" NTSTATUS
 DriverEntry(_In_ PDRIVER_OBJECT DriverObject, _In_ PUNICODE_STRING RegistryPath)
@@ -16,7 +25,7 @@ DriverEntry(_In_ PDRIVER_OBJECT DriverObject, _In_ PUNICODE_STRING RegistryPath)
 
     __try
     {
-        dprintf("[Driver] DriverEntry\n");
+        dprintf("[Driver] DriverEntry %p\n", HowAreYou());
         __debugbreak();
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
