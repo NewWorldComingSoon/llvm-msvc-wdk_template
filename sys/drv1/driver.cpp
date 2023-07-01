@@ -7,6 +7,7 @@ DriverUnload(_In_ PDRIVER_OBJECT DriverObject)
     dprintf("[Driver] DriverUnload\n");
 }
 
+#ifdef __llvmmsvc__
 __declspec(naked) UINT64 HowAreYou()
 {
     _asm
@@ -15,6 +16,13 @@ __declspec(naked) UINT64 HowAreYou()
         ret
     }
 }
+#else
+UINT64
+HowAreYou()
+{
+    return 0;
+}
+#endif
 
 _Function_class_(DRIVER_INITIALIZE) _IRQL_requires_same_ _IRQL_requires_(PASSIVE_LEVEL)
 extern "C" NTSTATUS
