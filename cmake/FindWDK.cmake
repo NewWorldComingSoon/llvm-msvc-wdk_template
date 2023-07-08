@@ -110,7 +110,6 @@ set(WDK_COMPILE_FLAGS
     "/kernel"  # create kernel mode binary
     "/FIwarning.h" # disable warnings in WDK headers
     "/FI${WDK_ADDITIONAL_FLAGS_FILE}" # include file to disable RTC
-    "/Qspectre-" # disable Qspectre
     "/WX-"
     )
 
