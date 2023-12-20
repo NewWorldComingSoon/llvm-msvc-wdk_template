@@ -13,14 +13,14 @@ jobs:
     steps:
     
     - name: Setup llvm-msvc
-      uses: NewWorldComingSoon/setup-llvm-msvc@v2
+      uses: backengineering/setup-llvm-msvc@v2
     
     - name: Checkout
       uses: actions/checkout@v2
       
     - name: Build
       run: |
-        cmake -Bbuild -TLLVM-MSVC_v143 -DCMAKE_WIN64_DRIVER=1
+        cmake -Bbuild -TLLVM-MSVC_v143 -Ax64 -TLLVM-MSVC_v143
         cmake --build build --config Release
     
     - uses: actions/upload-artifact@v2
