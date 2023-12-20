@@ -9,11 +9,18 @@ Simple [`cmkr`](https://cmkr.build) template for a WDK kernel driver for Windows
 - [WDK 11](https://learn.microsoft.com/en-us/windows-hardware/drivers/download-the-wdk)
 - [llvm-msvc](https://github.com/NewWorldComingSoon/llvm-msvc-build/releases)
 
-## Building with llvm-msvc
+## Building win-x64 with llvm-msvc
 
 ```
-cmake -Bbuild -TLLVM-MSVC_v143 -DCMAKE_WIN64_DRIVER=1
-cmake --build build --config Release
+cmake -Bbuild_x64 -Ax64 -TLLVM-MSVC_v143
+cmake --build build_x64 --config Release
+```
+
+## Building win-arm64 with llvm-msvc
+
+```
+cmake -Bbuild_arm64 -AARM64 -TLLVM-MSVC_v143
+cmake --build build_arm64 --config Release
 ```
 
 You can open `build\llvm-msvc-driver-template.sln` in Visual Studio and work there.
