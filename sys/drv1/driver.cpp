@@ -10,11 +10,13 @@ DriverUnload(_In_ PDRIVER_OBJECT DriverObject)
 #ifdef __llvmmsvc__
 __declspec(naked) UINT64 HowAreYou()
 {
+#    ifndef _ARM64_
     _asm
     {
         mov rax, 1
         ret
     }
+#    endif
 }
 #else
 UINT64

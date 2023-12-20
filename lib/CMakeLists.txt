@@ -21,4 +21,3 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${utils_SOURCES})
 target_compile_features(utils PUBLIC
 	cxx_std_20
 )
-
