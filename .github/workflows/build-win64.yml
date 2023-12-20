@@ -13,7 +13,7 @@ jobs:
     steps:
     
     - name: Setup llvm-msvc
-      uses: backengineering/setup-llvm-msvc@v2
+      uses: backengineering/setup-llvm-msvc@v5
     
     - name: Checkout
       uses: actions/checkout@v2
