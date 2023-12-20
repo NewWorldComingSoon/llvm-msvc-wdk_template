@@ -20,7 +20,7 @@ jobs:
       
     - name: Build
       run: |
-        cmake -Bbuild -TLLVM-MSVC_v143 -AARM64 -TLLVM-MSVC_v143
+        cmake -Bbuild -TLLVM-MSVC_v143 -AARM64
         cmake --build build --config Release
     
     - uses: actions/upload-artifact@v2
